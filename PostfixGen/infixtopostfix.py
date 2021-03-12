@@ -1,6 +1,6 @@
 EPSILON = 'ε'
-precedence = {'(':0, '|':1, '_':2,'*':3 } 
-operatorsVal = ["*","_","|"]
+precedence = {'(':0, '|':1, '_':2,'*':3,'?':3, '+':3} 
+operatorsVal = ["*","_","|","?","+"]
 notAlphabet = ["*","_","|","(",")","?"]
 
 def validChar(char):
@@ -17,7 +17,7 @@ def getAlphabet(expresion):
   alphabet = []
   for i in expresion:
     if i not in alphabet:
-      if i not in notAlphabet:
+      if i not in operatorsVal and i not in ["(",")","ε"]:
         alphabet.append(i)
   return alphabet
 
@@ -47,8 +47,8 @@ def computableExpresion(expresion):
       elif expresion[i-1] == ")" and expresion[i] == "(":
         #print("se agrega _",expresion[i])
         nuevaexpresion = nuevaexpresion + "_" + expresion[i]
-      elif expresion[i] == "+":
-        nuevaexpresion = nuevaexpresion + "|"
+      elif expresion[i] == "?":
+        nuevaexpresion = nuevaexpresion + "?"
       else:
         #print("se agrega ",expresion[i])
         nuevaexpresion = nuevaexpresion + expresion[i]
@@ -103,3 +103,17 @@ def infixaPostfix(exp):
   while( (not isEmpty(operators))):
     output.append(operators.pop())
   return output
+
+def expresionParaArbol(expresion):
+  nuevaexpresion = ""
+  for i in range(0,len(expresion)):
+    if i == 0:
+      nuevaexpresion = nuevaexpresion + expresion[i]
+    else:
+      #print("toca ",expresion[i]," anterior ",expresion[i-1])
+      if expresion[i] == "?":
+        nuevaexpresion = nuevaexpresion + "|ε"
+      else:
+        #print("se agrega ",expresion[i])
+        nuevaexpresion = nuevaexpresion + expresion[i]
+  return nuevaexpresion

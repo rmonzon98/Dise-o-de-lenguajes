@@ -52,34 +52,26 @@ def move(dictionary,finalNode,states,label):
 def subsetsBuilder(alphabet,states,dictionary,initial,final):
 
     Dstates = []
-    falseStates = states
     Dstates.append(sorted(eCerradura(dictionary,final,[initial])))
-    for i in Dstates[0]:
-        temp = falseStates.index(i)
-        falseStates.pop(temp)
 
     for i in Dstates:
-        if len(falseStates)>0:
-            for j in alphabet:
-                newList = (sorted(move(dictionary,final,i,j)))
-                if newList not in Dstates and not newList == []:
-                    Dstates.append(newList)
-                    if type(newList) == list:                    
-                        for k in newList:
-                            if k in falseStates:
-                                temp = falseStates.index(k)
-                                falseStates.pop(temp)
-                    else:
-                        if newList in falseStates:
-                            temp = falseStates.index(newList)
-                            falseStates.pop(temp)
-    transitions = []
+        for j in alphabet:
+            newList = (sorted(move(dictionary,final,i,j)))
+            if newList not in Dstates and not newList == []:
+                Dstates.append(newList)           
+    
     nameStates = []
+    print("-------------Lista de subconjuntos-------------")
     for i in range(0,len(Dstates)):
+        print("Subconjunto ", i, ": ", Dstates[i])
         nameStates.append(i)
+
+    transitions = []
     for i in Dstates:
         for j in alphabet:
             temp = sorted(move(dictionary,final,i,j))
-            if not temp == []:
+            if not temp == [] and temp in Dstates:
                 transitions.append((Dstates.index(i),Dstates.index(temp),j))
+    
     return transitions, nameStates, Dstates
+    

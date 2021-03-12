@@ -1,7 +1,7 @@
 epsilon = 'ε'
 
 def validChar(char):
-    if char in ["*","?","|","_"]:
+    if char in ["*","?","|","_","+"]:
         return False
 
     elif char == "ε":
@@ -33,18 +33,37 @@ def ThompsonAlgorithm(postfixexp):
             temp.unionOperator(first,second)
             nfaStack.append(temp)
             cont = cont + 2
-           
+
         if i == "_":
             second = nfaStack.pop()
             first = nfaStack.pop()
             first.concat(second)
             nfaStack.append(first)
+        
+        if i == "?":
+            second = NFA(cont, cont+1, epsilon)
+            cont = cont + 2
+            first = nfaStack.pop()
+            temp = NFA(cont, cont+1, epsilon)
+            temp.unionOperator(first,second)
+            nfaStack.append(temp)
+            cont = cont + 2
             
         if i == "*":
             temp = nfaStack.pop()
             temp.closure(cont,cont+1,epsilon)
             nfaStack.append(temp)
             cont = cont + 2
+        
+        if i == "+":       
+            first = nfaStack.pop()
+            second = NFA(first.getFinal() + first.getFinal() - first.getInitial(), first.getFinal() + first.getFinal(), first.getLabel())
+            second.createCopy(first.getDict(), first.getFinal())
+            cont = second.getFinal() + 1
+            second.closure(cont,cont+1, epsilon)
+            cont = cont + 2
+            first.concat(second)
+            nfaStack.append(first)
 
     return nfaStack.pop()
 
@@ -55,7 +74,7 @@ class NFA:
         self.initial = initial
         self.final = final
         self.label = label
-        if self.validChar(label):
+        if self.validChar(label) and final == initial + 1:
             self.createDict()
     
     def validChar(self,char):
@@ -70,6 +89,26 @@ class NFA:
             
         else: 
             return False
+
+    def createCopy(self,dictionaryOriginal, interval):
+        print(interval)
+        newDict = {}
+        for i in dictionaryOriginal:
+            firstKey = i
+            subdict = dictionaryOriginal[firstKey]
+            label = list(subdict.keys())[0]
+            values = list(subdict.values())[0]
+            nextValues =[]
+            if type(values) == list:
+                for j in values:
+                    nextValues.append(int(j)+int(interval))
+                newKey = int(i) + int(interval)
+                newDict[newKey] = {label: nextValues}
+            else:
+                newKey = int(i) + int(interval)
+                nextValues.append(values+interval)
+                newDict[i+interval] = {label: nextValues[0]}
+        self.dict = newDict
 
     def createDict(self):
         self.dict = {

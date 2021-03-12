@@ -1,6 +1,4 @@
 def eCerradura(dictionary, finalNode, node):
-    #print("\nEntra ",states," con ",secondElement)
-    #Si la ecerradura se hace al primer nodo se ejecuta esta parte
     if not finalNode == node:
         falseStates = []
         if type(node) == list:
@@ -62,23 +60,6 @@ def simulationNFA(dictionary, initial, final, expresion, subsets):
         return "No"
 
 def simulationFDA(subsetsTrans, states, expresion):
-    """
-    dictionary = {}
-    Actualstate = subsetsTrans[0][0]
-    infoState = []
-    infoStates = []
-    for i in subsetsTrans:
-        if i[0] == Actualstate:
-            infoState.append((i[2],i[1]))
-        else: 
-            infoStates.append(infoState)
-            infoState = []
-            Actualstate = i[0]
-            infoState.append((i[2],i[1]))
-    infoStates.append(infoState)
-    print(states)
-    print(infoStates)
-    """
     S = []
     Actualstate = states[0]
     for i in expresion:
