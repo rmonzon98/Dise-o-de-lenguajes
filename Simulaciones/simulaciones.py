@@ -48,38 +48,50 @@ def move(dictionary,finalNode,states,label):
         else:
             result.append(i)
     return list(set(result))
-  
-def subsetsBuilder(alphabet,states,dictionary,initial,final):
 
-    Dstates = []
-    falseStates = states
-    Dstates.append(sorted(eCerradura(dictionary,final,[initial])))
-    for i in Dstates[0]:
-        temp = falseStates.index(i)
-        falseStates.pop(temp)
+def simulationNFA(dictionary, initial, final, expresion, subsets):
+    S = []
+    S.append(sorted(eCerradura(dictionary,final,initial)))
+    cont = 0
+    for i in expresion:
+        S.append(sorted(move(dictionary,final,S[cont],i)))
+        cont = cont +1 
+    if subsets[len(subsets)-1] in S:
+        return "Sí"
+    else:
+        return "No"
 
-    for i in Dstates:
-        if len(falseStates)>0:
-            for j in alphabet:
-                newList = (sorted(move(dictionary,final,i,j)))
-                if newList not in Dstates and not newList == []:
-                    Dstates.append(newList)
-                    if type(newList) == list:                    
-                        for k in newList:
-                            if k in falseStates:
-                                temp = falseStates.index(k)
-                                falseStates.pop(temp)
-                    else:
-                        if newList in falseStates:
-                            temp = falseStates.index(newList)
-                            falseStates.pop(temp)
-    transitions = []
-    nameStates = []
-    for i in range(0,len(Dstates)):
-        nameStates.append(i)
-    for i in Dstates:
-        for j in alphabet:
-            temp = sorted(move(dictionary,final,i,j))
-            if not temp == []:
-                transitions.append((Dstates.index(i),Dstates.index(temp),j))
-    return transitions, nameStates, Dstates
+def simulationFDA(subsetsTrans, states, expresion):
+    """
+    dictionary = {}
+    Actualstate = subsetsTrans[0][0]
+    infoState = []
+    infoStates = []
+    for i in subsetsTrans:
+        if i[0] == Actualstate:
+            infoState.append((i[2],i[1]))
+        else: 
+            infoStates.append(infoState)
+            infoState = []
+            Actualstate = i[0]
+            infoState.append((i[2],i[1]))
+    infoStates.append(infoState)
+    print(states)
+    print(infoStates)
+    """
+    S = []
+    Actualstate = states[0]
+    for i in expresion:
+        flag = False
+        for j in subsetsTrans:
+            if j[0] == Actualstate and j[2] == i:
+                flag = True
+                S.append(j[1])
+                Actualstate = j[1]
+        if not flag:
+            return "No"
+    #print(subsetsTrans)
+    if states[len(states)-1] in S:
+        return "Sí"
+    else:
+        return "No"
