@@ -3,12 +3,56 @@ precedence = {'(':0, '|':1, '_':2,'*':3,'?':3, '+':3}
 operatorsVal = ["*","_","|","?","+"]
 notAlphabet = ["*","_","|","(",")","?"]
 
+def convertOperators(expresion):
+  newExpresion=""
+  for i in range(0,len(expresion)):
+    if expresion[i] in ["?","+"]:
+      if expresion[i] == "?":
+        newExpresion = newExpresion +"|ε"
+      else:
+        if expresion[i-1] == ")":
+          count = 1
+          reverse = i-2
+          temp = ")"
+          while reverse >= 0 and count > 0:
+            if expresion[reverse] == "(":
+              temp = temp + "("
+              count = count - 1
+            elif expresion[reverse] == ")":
+              temp = temp + ")"
+              count = count + 1
+            else:
+              temp = temp + expresion[reverse]
+            reverse = reverse - 1
+          tempReverse = temp [::-1]
+          newExpresion = newExpresion + tempReverse + "*"
+        else: 
+          newExpresion = newExpresion + expresion[i-1] + "*"
+    else:
+      newExpresion = newExpresion + expresion[i]
+  if "?" in newExpresion:
+    return convertOperators(newExpresion)
+  else:
+    return newExpresion
+
+
+def firstExpresion(expresion):
+  if "(" in expresion:
+    if expresion.count("(") == expresion.count(")"):
+      return True
+    else:
+      return False
+  else:
+    return True
+
 def validChar(char):
   if char.isalpha():
     return True
   elif char.isnumeric():
     return True
   elif char == "ε":
+    return True
+  elif char == "#":
     return True
   else: 
     return False
@@ -96,9 +140,9 @@ def infixaPostfix(exp):
           else: 
             output.append(operators.pop())
       else:
-        print(operators)
-        print(output)
-        print(i)
+        #print(operators)
+        #print(output)
+        #print(i)
         return "Error"     
   while( (not isEmpty(operators))):
     output.append(operators.pop())

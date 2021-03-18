@@ -1,0 +1,20 @@
+Ingrese la expresión, por favor: (a(ba)+)|(a(b)*a)|(a|b)
+Expresion en Postfix: ['a', 'b', 'a', '_', '+', '_', 'a', 'b', '*', '_', 'a', '_', '|', 'a', 'b', '|', '|']
+Se crea automata con etiqueta  a :     1 --- a --> 2
+Se crea automata con etiqueta  b :     3 --- b --> 4
+Se crea automata con etiqueta  a :     5 --- a --> 6
+Se realiza la operación cocatenación (_) entre el automata con el dict {3: {'b': 4}} y el automata con dict  {5: {'a': 6}}
+6
+Se realiza la operación cocatenación (_) entre el automata con el dict {1: {'a': 2}} y el automata con dict  {3: {'b': 4}, 4: {'a': 6}, 9: {'b': 10}, 10: {'a': 12}, 12: {'ε': [14, 9]Se crea automata con etiqueta  a :     15 --- a --> 16
+Se crea automata con etiqueta  b :     17 --- b --> 18
+Se realiza la operación closure (*) al automata con el dict {17: {'b': 18}}
+Se realiza la operación cocatenación (_) entre el automata con el dict {15: {'a': 16}} y el automata con dict  {17: {'b': 18}, 19: {'ε': [17, 20]}, 18: {'ε': 
+[20, 17]}}                                                                                                                                                    [20, 17]}}
+Se crea automata con etiqueta  a :     21 --- a --> 22
+Se realiza la operación cocatenación (_) entre el automata con el dict {15: {'a': 16}, 17: {'b': 18}, 18: {'ε': [20, 17]}, 16: {'ε': [17, 20]}} y el automata con dict  {21: {'a': 22}
+con dict  {21: {'a': 22}}
+Se realiza la operación OR (|) entre el automata con el dict {1: {'a': 2}, 4: {'a': 6}, 9: {'b': 10}, 10: {'a': 12}, 12: {'ε': [14, 9]}, 6: {'ε': [9, 14]}, 2: {'b': 4}} y el automata {'b': 4}} y el automata con dict  {15: {'a': 16}, 17: {'b': 18}, 18: {'ε': [20, 17]}, 16: {'ε': [17, 20]}, 20: {'a': 22}}
+Se crea automata con etiqueta  a :     25 --- a --> 26
+Se crea automata con etiqueta  b :     27 --- b --> 28
+Se realiza la operación OR (|) entre el automata con el dict {25: {'a': 26}} y el automata con dict  {27: {'b': 28}}
+Se realiza la operación OR (|) entre el automata con el dict {23: {'ε': [1, 15]}, 1: {'a': 2}, 4: {'a': 6}, 9: {'b': 10}, 10: {'a': 12}, 12: {'ε': [14, 9]}, 6: {'ε': [9, 14]}, 2: {'b: {'ε': [9, 14]}, 2: {'b': 4}, 15: {'a': 16}, 17: {'b': 18}, 18: {'ε': [20, 17]}, 16: {'ε': [17, 20]}, 20: {'a': 22}, 14: {'ε': 24}, 22: {'ε': 24}} y el autom [25, 27]}, 25: {'a': 26ata con dict  {29: {'ε': [25, 27]}, 25: {'a': 26}, 27: {'b': 28}, 26: {'ε': 30}, 28: {'ε': 30}}

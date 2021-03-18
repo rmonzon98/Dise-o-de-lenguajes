@@ -5,4 +5,7 @@
 * Implementación de simulación de un AFN (listo)
 * Implementación de simulación de un AFD (listo)
 
+
+(a+b)+ OJO a futuro
+
 NOTA: no tiene ponderación, pero se debe realizar un dubijo del grafo.

@@ -54,13 +54,13 @@ class graph:
             dot.edge(str(infoNodo[0]), str(infoNodo[2]), str(infoNodo[1]))
         dot.render('graficas/'+name+'.gv', view=True)
     
-    def graphSubsets(self, info, numberstates, name):
+    def graphSubsets(self, info, numberstates, name, finalNodeInside):
         dot = Digraph(name='Automata')
         dot.attr(rankdir = 'LR')
         for i in range (0,len(numberstates)):
-            if i == len(numberstates)-1:
+            if finalNodeInside[i]:
                 dot.node(str(numberstates[i]), str(numberstates[i]), shape='doublecircle')
-            else: 
+            else:
                 dot.node(str(numberstates[i]), str(numberstates[i]))
         for i in range (0,len(info)):
             dot.edge(str(info[i][0]), str(info[i][1]), str(info[i][2]))

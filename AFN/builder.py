@@ -21,8 +21,11 @@ def ThompsonAlgorithm(postfixexp):
     cont = 1
     
     for i in postfixexp:
-
+        #print("\nnueva vuelta ", i)
+        #for s in nfaStack:
+            #print(s.getDict())
         if (validChar(i)):
+            #print("Se crea automata con etiqueta ", i, ":    ", cont, "---", i, "-->",cont+1)
             nfaStack.append(NFA(cont, cont+1,i))
             cont = cont + 2
 
@@ -30,6 +33,7 @@ def ThompsonAlgorithm(postfixexp):
             temp = NFA(cont, cont+1, epsilon)
             second = nfaStack.pop()
             first = nfaStack.pop()
+            #print("Se realiza la operación OR (|) entre el automata con el dict",first.getDict(), "y el automata con dict ", second.getDict())
             temp.unionOperator(first,second)
             nfaStack.append(temp)
             cont = cont + 2
@@ -37,6 +41,7 @@ def ThompsonAlgorithm(postfixexp):
         if i == "_":
             second = nfaStack.pop()
             first = nfaStack.pop()
+            #print("Se realiza la operación cocatenación (_) entre el automata con el dict",first.getDict(), "y el automata con dict ", second.getDict())
             first.concat(second)
             nfaStack.append(first)
         
@@ -51,15 +56,18 @@ def ThompsonAlgorithm(postfixexp):
             
         if i == "*":
             temp = nfaStack.pop()
+            #print("Se realiza la operación closure (*) al automata con el dict",temp.getDict())
             temp.closure(cont,cont+1,epsilon)
             nfaStack.append(temp)
             cont = cont + 2
         
         if i == "+":       
             first = nfaStack.pop()
-            second = NFA(first.getFinal() + first.getFinal() - first.getInitial(), first.getFinal() + first.getFinal(), first.getLabel())
-            second.createCopy(first.getDict(), first.getFinal())
-            cont = second.getFinal() + 1
+            finalNode = first.getFinal()
+            firstNode = first.getInitial()
+            second = NFA((finalNode+finalNode)-(finalNode-firstNode), finalNode+finalNode, first.getLabel())
+            second.createCopy(first.getDict(),finalNode)
+            cont = second.getFinal() + 1 
             second.closure(cont,cont+1, epsilon)
             cont = cont + 2
             first.concat(second)
@@ -70,7 +78,6 @@ def ThompsonAlgorithm(postfixexp):
 class NFA:
 
     def __init__(self,initial, final, label):
-
         self.initial = initial
         self.final = final
         self.label = label
@@ -90,8 +97,8 @@ class NFA:
         else: 
             return False
 
-    def createCopy(self,dictionaryOriginal, interval):
-        print(interval)
+    def createCopy(self,dictionaryOriginal,lastNode):
+        #print(interval)
         newDict = {}
         for i in dictionaryOriginal:
             firstKey = i
@@ -101,13 +108,14 @@ class NFA:
             nextValues =[]
             if type(values) == list:
                 for j in values:
-                    nextValues.append(int(j)+int(interval))
-                newKey = int(i) + int(interval)
+                    nextValues.append((lastNode+lastNode)-(lastNode-j))
+                newKey = (lastNode+lastNode)-(lastNode-i)
                 newDict[newKey] = {label: nextValues}
             else:
-                newKey = int(i) + int(interval)
-                nextValues.append(values+interval)
-                newDict[i+interval] = {label: nextValues[0]}
+                newKey = (lastNode+lastNode)-(lastNode-i)
+                nextValues.append((lastNode+lastNode)-(lastNode-values))
+                newDict[newKey] = {label: nextValues[0]}
+            
         self.dict = newDict
 
     def createDict(self):
