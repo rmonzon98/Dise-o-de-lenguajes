@@ -121,6 +121,8 @@ def infixaPostfix(exp):
   output = []
   operators = []
   for i in exp:
+    #print(i)
+    #print(operators)
     if validChar(i):
       output.append(i)
     else:
